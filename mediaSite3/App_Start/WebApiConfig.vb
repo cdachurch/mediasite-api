@@ -8,7 +8,7 @@ Public Class WebApiConfig
     Public Shared Sub Register(ByVal config As HttpConfiguration)
         config.Routes.MapHttpRoute( _
            name:="DefaultApi", _
-           routeTemplate:="api/{controller}/{action}", _
+           routeTemplate:="{controller}/{action}", _
            defaults:=New With {.id = RouteParameter.Optional} _
        )
         config.Formatters.Remove(config.Formatters.XmlFormatter)

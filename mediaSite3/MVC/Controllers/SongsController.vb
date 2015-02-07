@@ -14,6 +14,9 @@ Public Class SongsController
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function BrowseJQGrid(<FromUri()> Params As BrowseSongsParams) As Dictionary(Of String, Object)
+
+        If Params <> Configuration.Properties.Item("APIToken") Then Throw New Exception("Invalid API Token.")
+
         If Params.sidx = Nothing Then Params.sidx = "Title"
         If Params.page = 0 Then Params.page = 1
         If Params.rows = 0 Then Params.rows = 25
@@ -23,7 +26,7 @@ Public Class SongsController
         For Each SongItem In SongSvc.BrowseSongs(Params)
             Dim cells() As String
             cells = {SongItem.Title, SongItem.Author1, SongItem.Author2}
-            Dim Row As New JQGridRow() With {.id = SongItem.id, .cell = New List(Of String)(cells)}
+            Dim Row As New JQGridRow() With {.id = SongItem.Id, .cell = New List(Of String)(cells)}
             rows.Add(Row)
         Next
 
@@ -41,7 +44,7 @@ Public Class SongsController
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function Search(<FromUri()> Params As SearchSongsParams) As Dictionary(Of String, Object)
-
+        If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         If Params.sidx = Nothing Then Params.sidx = "Title"
         If Params.page = 0 Then Params.page = 1
         If Params.rows = 0 Then Params.rows = 25
@@ -74,6 +77,7 @@ Public Class SongsController
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function GetSingleSong(<FromUri()> Params As GetSongParams) As Song
+        If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Return SongSvc.GetSong(Params.id)
     End Function
 
@@ -81,6 +85,7 @@ Public Class SongsController
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function SaveSong(<FromUri()> Params As SaveSongParams) As String
+        If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Return SongSvc.SaveSong(Params.songData)
     End Function
 
@@ -88,6 +93,7 @@ Public Class SongsController
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function DeleteSong(<FromUri()> Params As DeleteSongParams) As String
+        If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Return SongSvc.DeleteSong(Params.id)
     End Function
 

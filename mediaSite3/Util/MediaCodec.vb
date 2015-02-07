@@ -98,7 +98,7 @@ Public Class MediaCodec
     End Function
 
     Private Function decodeLegacy(pData As Object, pObjectType As OBJECTTYPE) As Object
-        Dim retData As Object
+        Dim retData As Object = Nothing
         Dim temp As String
 
         Select Case pObjectType

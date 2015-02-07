@@ -2,14 +2,8 @@ mediaSite3/web.config
 mediaSite3/bin
 mediaSite3/obj
 mediaSite3/My Project
-*.nupkg
-*.dll
-*.transform
-*.xml
-*.psm1
-*.exe
-*.ps1
-*.psd1
-*.config
-*.txt
-*.pdb
+packages/
+Web.*config
+*.gitignore
+mediaSite3.Tests/bin
+mediaSite3.Tests/obj

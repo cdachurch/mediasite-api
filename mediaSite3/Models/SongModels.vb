@@ -39,7 +39,7 @@ Namespace Models
         Public Property SongData As Object
         Public Property Mp3Link As String
         Public Property SongKey As String
-        Public Property CCLI As Long
+        Public Property CCLI As String
         Public Property Use1 As String
         Public Property Use2 As String
         Public Property Tempo As String
