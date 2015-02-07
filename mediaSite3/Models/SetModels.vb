@@ -6,8 +6,8 @@ Imports System.Data.Entity
 
 Namespace Models
      
-    <Table("Set")> _
-    Public Class [Set]
+    <Table("SetList")> _
+    Public Class SetList
         <Key()> _
         <DatabaseGeneratedAttribute(DatabaseGeneratedOption.Identity)> _
         Public Property SetId As Integer

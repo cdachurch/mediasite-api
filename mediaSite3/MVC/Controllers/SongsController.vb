@@ -108,6 +108,22 @@ Public Class SongsController
 
     End Function
 
+    <ActionName("UploadFile")> _
+    <HttpPost()> _
+    <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
+    Function UploadFile(AuthToken As String, file As HttpPostedFileBase) As ActionResult
+        If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
 
+
+    End Function
+
+    <ActionName("DownloadFile")> _
+   <HttpPost()> _
+   <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
+    Function DownloadFile(AuthToken As String, fileId As String) As FileResult
+        If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
+
+
+    End Function
 
 End Class
