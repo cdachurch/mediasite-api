@@ -67,6 +67,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="AWSSDK">
+      <HintPath>..\packages\AWSSDK.2.3.18.0\lib\net45\AWSSDK.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetOpenAuth.AspNet, Version=4.3.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\DotNetOpenAuth.AspNet.4.3.4.13329\lib\net45-full\DotNetOpenAuth.AspNet.dll</HintPath>
@@ -244,6 +247,7 @@
     <Compile Include="App_Start\RouteConfig.vb" />
     <Compile Include="App_Start\WebApiConfig.vb" />
     <Compile Include="Filters\InitializeSimpleMembershipAttribute.vb" />
+    <Compile Include="Gateways\AWS.vb" />
     <Compile Include="Models\AccountModels.vb" />
     <Compile Include="MVC\Controllers\AccountController.vb" />
     <Compile Include="MVC\Controllers\HomeController.vb" />
@@ -256,12 +260,14 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="MVC\Params\baseParams.vb" />
-    <Compile Include="MVC\Params\JQGridView.vb" />
+    <Compile Include="MVC\ViewModels\JQGridView.vb" />
     <Compile Include="MVC\Params\SetParameters.vb" />
     <Compile Include="MVC\Params\SongParameters.vb" />
     <Compile Include="Models\ReportingModels.vb" />
     <Compile Include="Models\SetModels.vb" />
     <Compile Include="Models\SongModels.vb" />
+    <Compile Include="MVC\ViewModels\SetViews.vb" />
+    <Compile Include="MVC\ViewModels\SongViews.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
       <DependentUpon>Application.myapp</DependentUpon>
@@ -278,6 +284,7 @@
     </Compile>
     <Compile Include="Repositories\SetRepo.vb" />
     <Compile Include="Repositories\SongRepo.vb" />
+    <Compile Include="Repositories\userRepo.vb" />
     <Compile Include="Services\SetService.vb" />
     <Compile Include="Services\SongService.vb" />
     <Compile Include="Util\dbUtil.vb" />
@@ -338,6 +345,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Gateways\Factories\" />
+    <Folder Include="Gateways\Interfaces\" />
     <Folder Include="Services\Factories\" />
     <Folder Include="Services\Interfaces\" />
   </ItemGroup>

@@ -7,3 +7,4 @@ Web.*config
 *.gitignore
 mediaSite3.Tests/bin
 mediaSite3.Tests/obj
+*.suo

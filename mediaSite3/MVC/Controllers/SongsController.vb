@@ -15,7 +15,7 @@ Public Class SongsController
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function BrowseJQGrid(<FromUri()> Params As BrowseSongsParams) As Dictionary(Of String, Object)
 
-        If Params <> Configuration.Properties.Item("APIToken") Then Throw New Exception("Invalid API Token.")
+        If Params.AuthToken <> Configuration.Properties.Item("APIToken") Then Throw New Exception("Invalid API Token.")
 
         If Params.sidx = Nothing Then Params.sidx = "Title"
         If Params.page = 0 Then Params.page = 1
@@ -121,6 +121,15 @@ Public Class SongsController
    <HttpPost()> _
    <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function DownloadFile(AuthToken As String, fileId As String) As FileResult
+        If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
+
+
+    End Function
+
+    <ActionName("DeleteFile")> _
+    <HttpPost()> _
+    <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
+    Function DeleteFile(AuthToken As String, fileId As String) As ActionResult
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
 
 

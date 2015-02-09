@@ -1,6 +1,7 @@
 ﻿Imports mediaSite3.ViewModels
 Imports mediaSite3.Models
 Imports mediaSite3.Repositories
+Imports mediaSite3.Params
 
 Namespace Services
 
@@ -9,11 +10,54 @@ Namespace Services
 
         Private _songRepo As New SongRepo
         Private _setRepo As New SetRepo
+        Private _userRepo As New UserRepo
+
+        Public Function GetSets(Params As GetSetsParams) As List(Of SetList)
+
+            'Get List of Sets
 
 
+        End Function
+
+        Public Function GetSet(Params As GetSetParams) As SetView
+
+            'Get Set
+
+            'Get Songs for Set
+
+            'Get Team members for Set
 
 
+        End Function
 
+        Public Function SaveSet(Params As SaveSetParams) As ActionResult
+
+            'Update Set/Songs/TeamMember Tables
+
+
+        End Function
+
+        Public Function DeleteSet(Params As DeleteSetParams) As ActionResult
+
+            ''Delete Set 
+
+        End Function
+
+        Public Function PublishSet(Params As PublishSetParams) As ActionResult
+
+        End Function
+
+        Public Function AddSongToSet(Params As AddSongToSetParams) As List(Of SetListSongs)
+
+        End Function
+
+        Public Function RemoveSongFromSet(Params As RemoveSongFromSetParams) As List(Of SetListSongs)
+
+        End Function
+
+        Public Function ReOrderSong(Params As ReOrderSongParams) As List(Of SetListSongs)
+
+        End Function
 
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' To detect redundant calls

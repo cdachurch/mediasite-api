@@ -4,6 +4,8 @@ Imports System.ComponentModel.DataAnnotations.Schema
 Imports System.Globalization
 Imports System.Data.Entity
 Imports mediaSite3.Models
+Imports mediaSite3.Params
+Imports mediaSite3.ViewModels
 
 Public Class SetRepo
     Inherits dbUtil
@@ -12,32 +14,37 @@ Public Class SetRepo
         MyBase.New("DevelopmentConnection")
     End Sub
 
-    Public Function GetSet() As Object
+    Public Function GetSets(Params As GetSetsParams) As List(Of SetList)
 
     End Function
 
-    Public Function SaveSet() As Object
+    Public Function GetSet(Params As GetSetParams) As SetView
 
     End Function
 
-    Public Function DeleteSet() As Object
+    Public Function SaveSet(Params As SaveSetParams) As ActionResult
 
     End Function
 
-    Public Function PublishSet() As Object
+    Public Function DeleteSet(Params As DeleteSetParams) As ActionResult
 
     End Function
 
-    Public Function AddSongToSet() As Object
+    Public Function PublishSet(Params As PublishSetParams) As ActionResult
 
     End Function
 
-    Public Function RemoveSongFromSet() As Object
+    Public Function AddSongToSet(Params As AddSongToSetParams) As List(Of SetListSongs)
 
     End Function
 
-    Public Function ReOrderSong() As Object
+    Public Function RemoveSongFromSet(Params As RemoveSongFromSetParams) As List(Of SetListSongs)
 
     End Function
+
+    Public Function ReOrderSong(Params As ReOrderSongParams) As List(Of SetListSongs)
+
+    End Function
+
 
 End Class
