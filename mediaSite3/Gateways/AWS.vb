@@ -15,26 +15,67 @@ Namespace Gateways
 
         Public Sub New()
 
-            bucketName = System.Configuration.ConfigurationManager.AppSettings("APIToken")
-            accessKey = System.Configuration.ConfigurationManager.AppSettings("APIToken")
-            secretKey = System.Configuration.ConfigurationManager.AppSettings("APIToken")
+            bucketName = System.Configuration.ConfigurationManager.AppSettings("AWSbucketname")
+            accessKey = System.Configuration.ConfigurationManager.AppSettings("AWSAccessKey")
+            secretKey = System.Configuration.ConfigurationManager.AppSettings("AWSSecretKey")
             client = New Amazon.S3.AmazonS3Client(accessKey, secretKey)
 
         End Sub
 
-        Public Function UploadFile()
+        Public Function UploadFile(pFileName As String, pFileStream As System.IO.Stream) As System.Net.HttpStatusCode
+
+            If pFileName.Length > 0 Then
+                Using client
+                    Dim putObjectRequest As New PutObjectRequest() With {.BucketName = bucketName,
+                                                                         .CannedACL = S3CannedACL.Private,
+                                                                         .Key = pFileName,
+                                                                         .InputStream = pFileStream}
+                    UploadFile = client.PutObject(putObjectRequest).HttpStatusCode
+                End Using
+            Else
+                Return Net.HttpStatusCode.NoContent
+            End If
 
         End Function
 
-        Public Function DownloadFile()
+        Public Function DownloadFile(pFileName As String) As String
+            Dim responseBody As String = ""
+
+            Using client
+                Dim getObjectRequest As New GetObjectRequest() With {.BucketName = bucketName,
+                                                                     .Key = pFileName}
+
+                Using response As GetObjectResponse = client.GetObject(getObjectRequest)
+                    Using responseStream As System.IO.Stream = response.ResponseStream
+                        Using reader As System.IO.StreamReader = New System.IO.StreamReader(responseStream)
+
+                            responseBody = reader.ReadToEnd()
+
+                        End Using
+                    End Using
+                End Using
+            End Using
 
         End Function
 
-        Public Function DeleteFile()
+        Public Function DeleteFile(pFileName As String) As System.Net.HttpStatusCode
+
+            Using client
+
+                Dim deleteObjectRequest = New DeleteObjectRequest() With {.BucketName = bucketName,
+                                                                          .Key = pFileName}
+
+                Return client.DeleteObject(deleteObjectRequest).HttpStatusCode
+
+            End Using
 
         End Function
 
-        Public Function ReplaceFile()
+        Public Function ReplaceFile(pFileName As String, pFileStream As System.IO.Stream) As System.Net.HttpStatusCode
+
+            DeleteFile(pFileName)
+
+            Return UploadFile(pFileName, pFileStream)
 
         End Function
 

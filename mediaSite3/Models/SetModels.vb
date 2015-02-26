@@ -20,24 +20,26 @@ Namespace Models
         Public Property DateCreated As DateTime
         Public Property DatePublished As DateTime?
         Public Property DateDeleted As DateTime?
+        Public Property Songs As List(Of SetListSong)
+        Public Property TeamMembers As List(Of SetListTeamMember)
     End Class
 
     <Table("SetListSongs")> _
-    Public Class SetListSongs
+    Public Class SetListSong
         Public Property SetId As Integer
         Public Property SongId As Integer
         Public Property Title As String
         Public Property Author1 As String
         Public Property Author2 As String
         Public Property SetOrder As Integer
-        Public Property PrintNotes As Integer
+        Public Property PrintNotes As Boolean
         Public Property TransposeKey As String
         Public Property FontSize As Integer?
         Public Property LayoutType As Integer
     End Class
 
     <Table("SetListTeamMembers")> _
-    Public Class SetListTeamMembers
+    Public Class SetListTeamMember
         Public Property SetId As Integer
         Public Property UserId As Integer
         Public Property Position As Integer

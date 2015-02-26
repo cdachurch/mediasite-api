@@ -19,7 +19,7 @@ Public Class SetController
     <ActionName("GetSet")> _
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Public Function GetSet(<FromUri()> Params As GetSetParams) As SetView
+    Public Function GetSet(<FromUri()> Params As GetSetParams) As SetList
         If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Return SetSvc.GetSet(Params)
     End Function
@@ -51,7 +51,7 @@ Public Class SetController
     <ActionName("AddSongToSet")> _
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Public Function AddSongToSet(<FromUri()> Params As AddSongToSetParams) As List(Of SetListSongs)
+    Public Function AddSongToSet(<FromUri()> Params As AddSongToSetParams) As List(Of SetListSong)
         If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Return SetSvc.AddSongToSet(Params)
     End Function
@@ -59,7 +59,7 @@ Public Class SetController
     <ActionName("RemoveSongFromSet")> _
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Public Function RemoveSongFromSet(<FromUri()> Params As RemoveSongFromSetParams) As List(Of SetListSongs)
+    Public Function RemoveSongFromSet(<FromUri()> Params As RemoveSongFromSetParams) As List(Of SetListSong)
         If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Return SetSvc.RemoveSongFromSet(Params)
     End Function
@@ -67,7 +67,7 @@ Public Class SetController
     <ActionName("ReOrderSong")> _
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Public Function ReOrderSong(<FromUri()> Params As ReOrderSongParams) As List(Of SetListSongs)
+    Public Function ReOrderSong(<FromUri()> Params As ReOrderSongParams) As List(Of SetListSong)
         If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Return SetSvc.ReOrderSong(Params)
     End Function

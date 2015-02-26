@@ -73,6 +73,61 @@ Public Class SongsController
 
     End Function
 
+    <ActionName("Search2")> _
+   <HttpGet()> _
+   <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
+    Function Search2(<FromUri()> Params As SearchSongsParams) As Dictionary(Of String, Object)
+        If Params.AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
+        If Params.sidx = Nothing Then Params.sidx = "Title"
+        If Params.page = 0 Then Params.page = 1
+        If Params.rows = 0 Then Params.rows = 25
+        If Params.sord = Nothing Then Params.sord = "ASC"
+        If Params.searchField = Nothing Then Params.searchField = "Title"
+        If Params.searchText = Nothing Then Params.searchText = ""
+        If Params.searchOper = Nothing Then Params.searchOper = "contains"
+
+        Dim rows As New List(Of MediaSiteGridRow)
+        Dim records As Long
+        Dim SongColl = SongSvc.SearchSong(Params, records)
+        For Each SongItem In SongColl
+            Dim Row As New MediaSiteGridRow() With {.id = SongItem.Id,
+                                                    .author1 = SongItem.Author1,
+                                                    .author2 = SongItem.Author2,
+                                                    .ccli = SongItem.CCLI,
+                                                    .copyDate = SongItem.CopyDate,
+                                                    .createdDate = SongItem.CreatedDate,
+                                                    .deletedDate = SongItem.DeletedDate,
+                                                    .fileLink = SongItem.FileLink,
+                                                    .fontSize = SongItem.FontSize,
+                                                    .lastModifiedDate = SongItem.LastModifiedDate,
+                                                    .mp3Link = SongItem.Mp3Link,
+                                                    .notes = SongItem.Notes,
+                                                    .publisher = SongItem.Publisher,
+                                                    .reference = SongItem.Reference,
+                                                    .sheetLayout = SongItem.SheetLayout,
+                                                    .songKey = SongItem.SongKey,
+                                                    .songOrder = SongItem.SongOrder,
+                                                    .style = SongItem.Style,
+                                                    .tempo = SongItem.Tempo,
+                                                    .title = SongItem.Title,
+                                                    .urlLink = SongItem.UrlLink,
+                                                    .use1 = SongItem.Use1,
+                                                    .use2 = SongItem.Use2,
+                                                    .youTubeLink = SongItem.YouTubeLink
+                                                  }
+            rows.Add(Row)
+        Next
+
+        Dim objDictObj As New Dictionary(Of String, Object)
+        objDictObj.Add("status", 200)
+        objDictObj.Add("totalRecords", records)
+        objDictObj.Add("pageNumber", Params.page)
+        objDictObj.Add("totalPages", Math.Ceiling(records / Params.rows))
+        objDictObj.Add("results", rows)
+        Return objDictObj
+
+    End Function
+
     <ActionName("GetSong")> _
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
@@ -111,28 +166,25 @@ Public Class SongsController
     <ActionName("UploadFile")> _
     <HttpPost()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Function UploadFile(AuthToken As String, file As HttpPostedFileBase) As ActionResult
+    Function UploadFile(AuthToken As String, file As HttpPostedFileBase) As HttpStatusCodeResult
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
-
-
+        Return SongSvc.UploadFile(file)
     End Function
 
     <ActionName("DownloadFile")> _
    <HttpPost()> _
    <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Function DownloadFile(AuthToken As String, fileId As String) As FileResult
+    Function DownloadFile(AuthToken As String, fileId As String) As String
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
-
-
+        Return SongSvc.DownloadFile(fileId)
     End Function
 
     <ActionName("DeleteFile")> _
     <HttpPost()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Function DeleteFile(AuthToken As String, fileId As String) As ActionResult
+    Function DeleteFile(AuthToken As String, fileId As String) As HttpStatusCodeResult
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
-
-
+        Return SongSvc.DeleteFile(fileId)
     End Function
 
 End Class

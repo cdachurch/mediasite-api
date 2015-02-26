@@ -8,6 +8,7 @@ Namespace Services
         Implements IDisposable
 
         Private _songRepo As New SongRepo
+        Private _AWSGateWay As New Gateways.AWS
 
         Public Function GetSongCount()
             Return _songRepo.SongCount()
@@ -40,6 +41,18 @@ Namespace Services
             Return ""
         End Function
 
+        Public Function DownloadFile(fileId As String) As String
+
+        End Function
+
+        Public Function UploadFile(file As HttpPostedFileBase) As HttpStatusCodeResult
+
+        End Function
+
+        Public Function DeleteFile(fileId As String) As HttpStatusCodeResult
+
+        End Function
+
 #Region "IDisposable Support"
         Private disposedValue As Boolean ' To detect redundant calls
 
@@ -49,6 +62,7 @@ Namespace Services
                 If disposing Then
                     ' TODO: dispose managed state (managed objects).
                     _songRepo.Dispose()
+                    _AWSGateWay.Dispose()
                 End If
 
                 ' TODO: free unmanaged resources (unmanaged objects) and override Finalize() below.

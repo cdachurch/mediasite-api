@@ -15,18 +15,22 @@ Namespace Services
         Public Function GetSets(Params As GetSetsParams) As List(Of SetList)
 
             'Get List of Sets
-
+            Return _setRepo.GetSets(Params)
 
         End Function
 
-        Public Function GetSet(Params As GetSetParams) As SetView
+        Public Function GetSet(Params As GetSetParams) As SetList
 
             'Get Set
+            Dim setObj = _setRepo.GetSet(Params)
 
             'Get Songs for Set
+            setObj.Songs = _setRepo.GetSetSongs(Params)
 
             'Get Team members for Set
+            setObj.TeamMembers = _setRepo.GetSetMembers(Params)
 
+            Return setObj
 
         End Function
 
@@ -47,15 +51,15 @@ Namespace Services
 
         End Function
 
-        Public Function AddSongToSet(Params As AddSongToSetParams) As List(Of SetListSongs)
+        Public Function AddSongToSet(Params As AddSongToSetParams) As List(Of SetListSong)
 
         End Function
 
-        Public Function RemoveSongFromSet(Params As RemoveSongFromSetParams) As List(Of SetListSongs)
+        Public Function RemoveSongFromSet(Params As RemoveSongFromSetParams) As List(Of SetListSong)
 
         End Function
 
-        Public Function ReOrderSong(Params As ReOrderSongParams) As List(Of SetListSongs)
+        Public Function ReOrderSong(Params As ReOrderSongParams) As List(Of SetListSong)
 
         End Function
 
