@@ -4,6 +4,7 @@ Imports mediaSite3.Models
 Imports mediaSite3.ViewModels
 Imports Newtonsoft.Json
 Imports mediaSite3.Params
+Imports System.Net.WebRequestMethods
 
 Public Class SongsController
     Inherits ApiController
@@ -59,7 +60,7 @@ Public Class SongsController
         For Each SongItem In SongColl
             Dim cells() As String
             cells = {SongItem.Title, SongItem.Author1, SongItem.Author2}
-            Dim Row As New JQGridRow() With {.id = SongItem.id, .cell = New List(Of String)(cells)}
+            Dim Row As New JQGridRow() With {.id = SongItem.Id, .cell = New List(Of String)(cells)}
             rows.Add(Row)
         Next
 
@@ -172,11 +173,12 @@ Public Class SongsController
     End Function
 
     <ActionName("DownloadFile")> _
-   <HttpPost()> _
+   <HttpGet()> _
    <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Function DownloadFile(AuthToken As String, fileId As String) As String
+    Function DownloadFile(AuthToken As String, fileId As String) As ActionResult
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
-        Return SongSvc.DownloadFile(fileId)
+        Dim fileData = SongSvc.DownloadFile(fileId, 0)
+        Return New FileStreamResult(fileData, "audio/mpeg")
     End Function
 
     <ActionName("DeleteFile")> _

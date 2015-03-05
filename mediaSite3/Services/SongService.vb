@@ -41,7 +41,12 @@ Namespace Services
             Return ""
         End Function
 
-        Public Function DownloadFile(fileId As String) As String
+        Public Function DownloadFile(fileId As Integer, fileTypeId As Integer) As System.IO.Stream
+
+            'Get File 
+            Dim fileKey = GetFileNameString(fileId, fileTypeId)
+
+            Return _AWSGateWay.DownloadFile(fileKey)
 
         End Function
 
@@ -50,6 +55,22 @@ Namespace Services
         End Function
 
         Public Function DeleteFile(fileId As String) As HttpStatusCodeResult
+
+        End Function
+
+        Private Function GetFileNameString(ByVal p_intID As Integer, ByVal p_intfileType As Integer) As String
+
+            Dim strRet As String = "00000000"
+
+            If p_intfileType = 0 Then
+                strRet = "00000000" & p_intID
+                strRet = Right(strRet, 8)
+            Else
+                strRet = "00000000" & p_intID
+                strRet = "1" & Right(strRet, 7)
+            End If
+
+            GetFileNameString = strRet & ".dat"
 
         End Function
 

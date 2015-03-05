@@ -5,8 +5,10 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
     <TestMethod()> Public Sub TestMethod1()
 
+        Dim objAWS As New Gateways.AWS()
+        Dim output = objAWS.DownloadFile("00004520.dat")
 
-
+        Console.Write(output)
 
     End Sub
 

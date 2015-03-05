@@ -287,6 +287,7 @@
     <Compile Include="Repositories\userRepo.vb" />
     <Compile Include="Services\SetService.vb" />
     <Compile Include="Services\SongService.vb" />
+    <Compile Include="Util\Crypto.vb" />
     <Compile Include="Util\dbUtil.vb" />
     <Compile Include="Util\MediaCodec.vb" />
     <Compile Include="Util\ObjectFu.vb" />

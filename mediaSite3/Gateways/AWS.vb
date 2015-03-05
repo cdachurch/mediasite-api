@@ -18,7 +18,7 @@ Namespace Gateways
             bucketName = System.Configuration.ConfigurationManager.AppSettings("AWSbucketname")
             accessKey = System.Configuration.ConfigurationManager.AppSettings("AWSAccessKey")
             secretKey = System.Configuration.ConfigurationManager.AppSettings("AWSSecretKey")
-            client = New Amazon.S3.AmazonS3Client(accessKey, secretKey)
+            client = New Amazon.S3.AmazonS3Client(accessKey, secretKey, Amazon.RegionEndpoint.USWest2)
 
         End Sub
 
@@ -38,8 +38,8 @@ Namespace Gateways
 
         End Function
 
-        Public Function DownloadFile(pFileName As String) As String
-            Dim responseBody As String = ""
+        Public Function DownloadFile(pFileName As String) As System.IO.Stream
+
 
             Using client
                 Dim getObjectRequest As New GetObjectRequest() With {.BucketName = bucketName,
@@ -47,11 +47,11 @@ Namespace Gateways
 
                 Using response As GetObjectResponse = client.GetObject(getObjectRequest)
                     Using responseStream As System.IO.Stream = response.ResponseStream
-                        Using reader As System.IO.StreamReader = New System.IO.StreamReader(responseStream)
 
-                            responseBody = reader.ReadToEnd()
-
-                        End Using
+                        Dim objCrypto As New Crypto()
+                        Dim decryptedResponseStream = objCrypto.EncryptDecryptStream(responseStream, Crypto.CryptoAction.actionDecrypt)
+                        decryptedResponseStream.Position = 0
+                        Return decryptedResponseStream
                     End Using
                 End Using
             End Using
