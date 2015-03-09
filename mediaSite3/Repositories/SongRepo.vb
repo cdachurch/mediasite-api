@@ -16,6 +16,32 @@ Namespace Repositories
 
         'Public Property Songs As List(Of Song)
 
+        Public Sub SetFileName(songId As Integer, fileType As Integer, fileName As String)
+            Dim fieldName As String
+
+            If fileType = 0 Then
+                fieldName = "Mp3Link"
+            Else
+                fieldName = "FileLink"
+            End If
+ 
+            ExecuteWithoutIdentity("UPDATE Songs SET " & fieldName & "=@P0 WHERE Id=@P1", fileName, songId)
+ 
+        End Sub
+
+        Public Function GetFileName(songId As Integer, fileType As Integer) As String
+            Dim fieldName As String
+
+            If fileType = 0 Then
+                fieldName = "Mp3Link"
+            Else
+                fieldName = "FileLink"
+            End If
+
+            Return QueryScalar(Of String)("SELECT " & fieldName & " FROM Songs WHERE Id = @P0", songId)
+
+        End Function
+
         Public Function SongCount() As Long
             Return QueryScalar(Of Long)("SELECT COUNT(*) From Songs WHERE DeletedDate is NULL ", Nothing)
         End Function

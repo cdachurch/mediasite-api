@@ -18,11 +18,11 @@ Namespace Services
             Return _songRepo.BrowseSongs(Params)
         End Function
 
-        Public Function GetSong(id As Integer) As Song
+        Public Function GetSong(songId As Integer) As Song
             Dim objSong As Song
-            objSong = _songRepo.SongById(id)
+            objSong = _songRepo.SongById(songId)
 
-            Dim objMediaCodec As New MediaCodec(Nothing, id, objSong.Title, objSong.SongKey)
+            Dim objMediaCodec As New MediaCodec(Nothing, songId, objSong.Title, objSong.SongKey)
             objSong.SongData = objMediaCodec.Decode(objSong.SongData, objSong.SongEncoding)
             objMediaCodec = Nothing
 
@@ -37,24 +37,39 @@ Namespace Services
             Return ""
         End Function
 
-        Public Function DeleteSong(id As Integer) As String
+        Public Function DeleteSong(songId As Integer) As String
             Return ""
         End Function
 
-        Public Function DownloadFile(fileId As Integer, fileTypeId As Integer) As System.IO.Stream
+        Public Sub SetFileName(songId As Integer, fileType As Integer, fileName As String)
+            _songRepo.SetFileName(songId, fileType, fileName)
+        End Sub
+
+        Public Function GetFileName(songId As Integer, fileType As Integer) As String
+            Return _songRepo.GetFileName(songId, fileType)
+        End Function
+
+        Public Function DownloadFile(songId As Integer, fileTypeId As Integer) As System.IO.MemoryStream
 
             'Get File 
-            Dim fileKey = GetFileNameString(fileId, fileTypeId)
-
+            Dim fileKey = GetFileNameString(songId, fileTypeId)
             Return _AWSGateWay.DownloadFile(fileKey)
 
         End Function
 
-        Public Function UploadFile(file As HttpPostedFileBase) As HttpStatusCodeResult
+        Public Function UploadFile(file As HttpPostedFileBase, songId As String, fileTypeId As Integer) As HttpStatusCodeResult
+
+            'Get File 
+            Dim fileKey = GetFileNameString(songId, fileTypeId)
+            Return New HttpStatusCodeResult(_AWSGateWay.UploadFile(fileKey, file.InputStream))
 
         End Function
 
-        Public Function DeleteFile(fileId As String) As HttpStatusCodeResult
+        Public Function DeleteFile(songId As String, fileTypeId As Integer) As HttpStatusCodeResult
+
+            'Get File 
+            Dim fileKey = GetFileNameString(songId, fileTypeId)
+            Return New HttpStatusCodeResult(_AWSGateWay.DeleteFile(fileKey))
 
         End Function
 

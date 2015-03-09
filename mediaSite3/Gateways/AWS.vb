@@ -38,13 +38,11 @@ Namespace Gateways
 
         End Function
 
-        Public Function DownloadFile(pFileName As String) As System.IO.Stream
+        Public Function DownloadFile(pFileName As String) As System.IO.MemoryStream
 
 
             Using client
-                Dim getObjectRequest As New GetObjectRequest() With {.BucketName = bucketName,
-                                                                     .Key = pFileName}
-
+                Dim getObjectRequest As New GetObjectRequest() With {.BucketName = bucketName, .Key = pFileName}
                 Using response As GetObjectResponse = client.GetObject(getObjectRequest)
                     Using responseStream As System.IO.Stream = response.ResponseStream
 
@@ -61,13 +59,16 @@ Namespace Gateways
         Public Function DeleteFile(pFileName As String) As System.Net.HttpStatusCode
 
             Using client
-
-                Dim deleteObjectRequest = New DeleteObjectRequest() With {.BucketName = bucketName,
-                                                                          .Key = pFileName}
-
+                Dim deleteObjectRequest = New DeleteObjectRequest() With {.BucketName = bucketName, .Key = pFileName}
                 Return client.DeleteObject(deleteObjectRequest).HttpStatusCode
-
             End Using
+
+        End Function
+
+        Public Function FileExists(pFileName As String) As Boolean
+
+            Dim s3FileInfo As New Amazon.S3.IO.S3FileInfo(client, bucketName, pFileName)
+            Return s3FileInfo.Exists
 
         End Function
 

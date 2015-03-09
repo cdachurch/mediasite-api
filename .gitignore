@@ -8,3 +8,6 @@ Web.*config
 mediaSite3.Tests/bin
 mediaSite3.Tests/obj
 *.suo
+mediaSite3.Tests/My Project/Settings.settings
+mediaSite3.Tests/My Project/Settings.Designer.vb
+*.config

@@ -5,6 +5,8 @@ Imports mediaSite3.ViewModels
 Imports Newtonsoft.Json
 Imports mediaSite3.Params
 Imports System.Net.WebRequestMethods
+Imports System.Net.Http
+Imports System.Net.Http.Headers
 
 Public Class SongsController
     Inherits ApiController
@@ -120,7 +122,7 @@ Public Class SongsController
         Next
 
         Dim objDictObj As New Dictionary(Of String, Object)
-        objDictObj.Add("status", 200)
+        objDictObj.Add("status", HttpStatusCode.OK)
         objDictObj.Add("totalRecords", records)
         objDictObj.Add("pageNumber", Params.page)
         objDictObj.Add("totalPages", Math.Ceiling(records / Params.rows))
@@ -129,7 +131,7 @@ Public Class SongsController
 
     End Function
 
-    <ActionName("GetSong")> _
+    <ActionName("GetSingleSong")> _
     <HttpGet()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
     Function GetSingleSong(<FromUri()> Params As GetSongParams) As Song
@@ -167,26 +169,49 @@ Public Class SongsController
     <ActionName("UploadFile")> _
     <HttpPost()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Function UploadFile(AuthToken As String, file As HttpPostedFileBase) As HttpStatusCodeResult
+    Function UploadFile(AuthToken As String, file As HttpPostedFileBase, songId As Integer, fileType As Integer) As HttpStatusCodeResult
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
-        Return SongSvc.UploadFile(file)
+        Dim result = SongSvc.UploadFile(file, songId, fileType)
+        If result.StatusCode = HttpStatusCode.OK Then
+            SongSvc.SetFileName(songId, fileType, file.FileName)
+        End If
     End Function
 
     <ActionName("DownloadFile")> _
    <HttpGet()> _
    <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Function DownloadFile(AuthToken As String, fileId As String) As ActionResult
+    Function DownloadFile(AuthToken As String, fileId As String) As HttpResponseMessage
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
         Dim fileData = SongSvc.DownloadFile(fileId, 0)
-        Return New FileStreamResult(fileData, "audio/mpeg")
+        Dim fileName = SongSvc.GetFileName(fileId, 0)
+        Dim result As New HttpResponseMessage(HttpStatusCode.OK)
+        result.Content = New StreamContent(fileData)
+        Dim cd As New System.Net.Mime.ContentDisposition With {.FileName = fileName, .Inline = False}
+        result.Content.Headers.ContentType = New MediaTypeHeaderValue("application/octet-stream")
+        result.Content.Headers.Add("Content-Disposition", cd.ToString())
+        Return result
+    End Function
+
+    <ActionName("StreamFile")> _
+    <OverrideResultFilters> _
+    <HttpGet()> _
+   <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
+    Function StreamFile(AuthToken As String, fileId As String) As FileContentResult
+        If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
+        Dim fileData = SongSvc.DownloadFile(fileId, 0)
+        Dim fileName = SongSvc.GetFileName(fileId, 0)
+        Return New FileContentResult(fileData.ToArray, "application/octet-stream") With {.FileDownloadName = fileName}
     End Function
 
     <ActionName("DeleteFile")> _
     <HttpPost()> _
     <WebPermission(System.Security.Permissions.SecurityAction.Demand)> _
-    Function DeleteFile(AuthToken As String, fileId As String) As HttpStatusCodeResult
+    Function DeleteFile(AuthToken As String, songId As String, fileType As Integer) As HttpStatusCodeResult
         If AuthToken <> System.Configuration.ConfigurationManager.AppSettings("APIToken") Then Throw New Exception("Invalid API Token.")
-        Return SongSvc.DeleteFile(fileId)
+        Dim result = SongSvc.DeleteFile(songId, fileType)
+        If result.StatusCode = HttpStatusCode.OK Then
+            SongSvc.SetFileName(songId, fileType, "")
+        End If
     End Function
 
 End Class
